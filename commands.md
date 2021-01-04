@@ -16,6 +16,7 @@ npx tsconfig.json
 
 ```
 yarn add @mikro-orm/cli @mikro-orm/core @mikro-orm/migrations @mikro-orm/postgresql pg
+[Add ts types from yarn] yarn add -D @types/node typescript   
 ```
 
 # Initialize postgres db in Arch
@@ -45,4 +46,5 @@ npx mikro-orm migration:create
 ```
 yarn add express apollo-server-express graphql type-graphql
 yarn add -D @types/express
+yarn add reflect-metadata
 ```
