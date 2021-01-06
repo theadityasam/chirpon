@@ -48,3 +48,12 @@ yarn add express apollo-server-express graphql type-graphql
 yarn add -D @types/express
 yarn add reflect-metadata
 ```
+
+# Store cookies on redis
+Expressjs session cookies will be stored on redis
+
+```
+yarn add redis connect-redis express-session
+[Add types, it's a dev dependency]
+yarn add -D @types/express-session @types/redis @types/connect-redis
+```

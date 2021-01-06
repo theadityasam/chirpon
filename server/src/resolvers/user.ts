@@ -1,5 +1,5 @@
 import { MyContext } from "../types";
-import { Arg, Ctx, Field, InputType, Mutation, ObjectType, Resolver } from "type-graphql";
+import { Arg, Ctx, Field, InputType, Mutation, ObjectType, Query, Resolver } from "type-graphql";
 import argon2 from "argon2";
 import { User } from "../entities/User";
 
@@ -30,11 +30,23 @@ class UserResponse {
 
 @Resolver()
 export class UserResolver {
-    @Mutation(() => User)
+    @Query(() => User, {nullable: true})
+    async me(
+        @Ctx() {em, req}: MyContext
+    ) {
+        //If logged in
+        if(!req.session.userId){
+            return null;
+        }
+        const user = await em.findOne(User, {id: req.session.userId});
+        return user;
+    }
+
+    @Mutation(() => UserResponse)
     async register(
         @Arg('options') options: UsernamePasswordInput, // Add , "() => UsernamePasswordInput" in @Arg("optons", ...) if type error
-        @Ctx() {em}: MyContext
-     ) {
+        @Ctx() {em, req}: MyContext
+     ): Promise<UserResponse> {
         if(options.username.length <= 2) {
             return {
                 errors: [{
@@ -59,7 +71,7 @@ export class UserResolver {
         try {
             await em.persistAndFlush(user);
         } catch(err) {
-            if(err.code === "23505") { //|| err.detail.includes("already exists")){
+            if(err.code === '23505') { //|| err.detail.includes("already exists")){
                 //Duplicate username error
                 return {
                     errors: [{
@@ -68,15 +80,18 @@ export class UserResolver {
                     }]
                 }
             }
-            console.log("message", err.message)
+            // console.log("message", err)
         }
-        return user;
+        
+        // Set cookie, login the user
+        req.session.userId = user.id;
+        return {user, };
     }
 
     @Mutation(() => UserResponse)
     async login(
-        @Arg('options') options: UsernamePasswordInput, // Add , "() => UsernamePasswordInput" in @Arg("optons", ...) if type error
-        @Ctx() {em}: MyContext
+        @Arg("options") options: UsernamePasswordInput, // Add , "() => UsernamePasswordInput" in @Arg("optons", ...) if type error
+        @Ctx() {em, req}: MyContext
      ): Promise<UserResponse> {
         const user = await em.findOne(User, {username: options.username})
         if(!user){
@@ -96,6 +111,11 @@ export class UserResolver {
                 }]
             }
         }
+        
+        
+        req.session.userId = user.id;
+        // req.session.id = user.id;
+
         return {user, };
     }
 }
