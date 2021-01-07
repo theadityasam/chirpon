@@ -12,26 +12,26 @@ import {
 import { Wrapper } from "../components/Wrapper";
 import { InputField } from "../components/InputField";
 import { useMutation } from "urql";
-import { useRegisterMutation } from "../generated/graphql";
+import { useLoginMutation } from "../generated/graphql";
 import { toErrorMap } from "../utils/toErrorMap";
 import { useRouter } from "next/router";
 
 interface registerProps {}
 
-export const Register: React.FC<registerProps> = ({}) => {
+export const Login: React.FC<{}> = ({}) => {
   const router = useRouter();
-  const [, register] = useRegisterMutation();
+  const [, login] = useLoginMutation();
   return (
     <Wrapper variant="small">
       <Formik
         initialValues={{ username: "", password: "" }}
         onSubmit={async (values, { setErrors }) => {
-          const response = await register(values); // Since values line up exactly with graphql schema, we can directly pass 'values' object
+          const response = await login(values); // Since values line up exactly with graphql schema, we can directly pass 'values' object
           // register({username: values.password, password: values.password}); // In case the values do not line up
-          if (response.data?.register.errors) {
+          if (response.data?.login.errors) {
             [{ field: "username", message: "something wrong" }];
-            setErrors(toErrorMap(response.data.register.errors));
-          } else if (response.data?.register.user) {
+            setErrors(toErrorMap(response.data.login.errors));
+          } else if (response.data?.login.user) {
             // Registration worked
             router.push("/");
           }
@@ -67,4 +67,4 @@ export const Register: React.FC<registerProps> = ({}) => {
   );
 };
 
-export default Register;
+export default Login;
