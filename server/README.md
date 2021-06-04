@@ -1,5 +1,7 @@
 # Package Script
 
+The following scripts have been tested on Manjaro linux
+
 ```
 "watch": "tsc -w"
 ```
@@ -28,10 +30,31 @@ sudo -iu postgres // Enter postgres root
 
 [To start the db service]
 [postgres]$ pg_ctl -D /var/lib/postgres/data -l logfile start
+[Very first time terminal] sudo systemctl enable --now postgresql.service
 [Or in terminal]$ sudo systemctl start postgres
 
 [To create a user]
 [postgres]$ createuser --interactive
+
+[Add postgres to ignore group]
+sudo vi /etc/pacman.conf
+And then add postgresql and postgresql-libs to "IgnorePkg = ..."
+
+[Remove Postgresql]
+sudo pacman -S postgresql-libs postgresql
+sudo rm -rf /var/lib/postgresql/
+sudo rm -rf /var/log/postgresql/
+sudo rm -rf /etc/postgresql/
+```
+
+# Check if Postgres and Redis are running
+
+```
+[For Redis]
+redis-cli ping
+
+[For Postgres]
+ps auxwww | grep postgres
 ```
 
 # Initialize mikroorm from their website

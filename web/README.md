@@ -49,3 +49,19 @@ yarn add -D @graphql-codegen/typescript-urql
 [For graphql code generator after adding the mutations and queries within the folder]
 yarn gen
 ```
+
+## Installing Graphcache
+
+URQL doesn't have normalised cache management, they've a separate package called graphcache.
+
+```bash
+yarn add @urql/exchange-graphcache
+```
+
+We wanna do a custom update when a user logs in, and we can update cached pages
+
+## Setup server side rendering for specific pages
+
+```bash
+yarn add next-urql react-is isomorphic-unfetch
+```
