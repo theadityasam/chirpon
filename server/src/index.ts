@@ -59,13 +59,14 @@ const main = async () => {
       resolvers: [HelloResolver, PostResolver, UserResolver],
       validate: false,
     }),
-    context: ({ req, res }) => ({ em: orm.em, req, res }),
+    context: ({ req, res }) => ({ em: orm.em, req, res }), //context is a special object accessible by all the resolvers.
+    // We want the em object to be exposed to get the entities.
   });
 
   apolloServer.applyMiddleware({ app, cors: false });
 
   app.get("/", (_, res) => {
-    res.send("Hey");
+    res.send("Hey I'm Aditya");
   });
   app.listen(4000, () => {
     console.log("Server started on localhost:4000");

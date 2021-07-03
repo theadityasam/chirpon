@@ -25,6 +25,7 @@ yarn add @mikro-orm/cli @mikro-orm/core @mikro-orm/migrations @mikro-orm/postgre
 
 ```
 [First time]
+Visit - https://wiki.archlinux.org/title/PostgreSQL
 sudo -iu postgres // Enter postgres root
 [postgres]$ initdb -D /var/lib/postgres/data
 
